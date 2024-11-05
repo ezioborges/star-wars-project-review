@@ -10,7 +10,8 @@ export default function ApiPlanetsProvider({
   children,
 }: ApiPlanetsProviderProps) {
   const [planets, setPlanets] = useState<PlanetType[]>([]);
-  const [isLoad, setIsLoad] = useState(true)
+  const [isLoad, setIsLoad] = useState(true);
+  const [planetName, setPlanetName] = useState<string>("");
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -29,8 +30,22 @@ export default function ApiPlanetsProvider({
     fetchPlanets();
   }, []);
 
+  const updatePlanetsName = (name: string) => setPlanetName(name);
+
+  const findPlanetByName = (planetName: string) => {
+    setPlanetName(planetName)
+  };
+
   return (
-    <ApiStarWarsContext.Provider value={{ planets, isLoad }}>
+    <ApiStarWarsContext.Provider
+      value={{
+        planets,
+        isLoad,
+        planetName,
+        updatePlanetsName,
+        findPlanetByName,
+      }}
+    >
       {children}
     </ApiStarWarsContext.Provider>
   );

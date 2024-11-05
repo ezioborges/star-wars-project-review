@@ -1,11 +1,11 @@
 import './App.css'
-import Table from './Page/Table'
+import Body from './Page/Body'
 
 function App() {
 
   return (
     <>
-      <Table />
+      <Body />
     </>
   )
 }

@@ -2,18 +2,32 @@ import { useContext, useEffect, useState } from "react";
 import ApiStarWarsContext from "../context/ApiStarWarsContext";
 import { PlanetType } from "../types";
 
-import '../styles/table.css';
+import "../styles/table.css";
 
 function Table() {
-  const { planets, isLoad } = useContext(ApiStarWarsContext);
+  const { planets, isLoad, planetName } = useContext(ApiStarWarsContext);
 
   const [planetsTable, setPlanetsTable] = useState<PlanetType[]>([]);
+  const [filteredPlanets, setFilteredPlanets] = useState<PlanetType[]>([]);
 
+  // se tiver um array de planetas quando carrega a página o estado "planetsTable" recebe os planetas que vem do context.
   useEffect(() => {
     if (planets.length > 0) {
       setPlanetsTable(planets);
     }
   }, [planets]);
+
+  //Filtra planetas com base no nome de pesquisa.
+  useEffect(() => {
+    if (planetName) {
+      const filtered = planetsTable.filter((planet) =>
+        planet.name.toLowerCase().includes(planetName.toLowerCase())
+      );
+      setFilteredPlanets(filtered);
+    } else {
+      setFilteredPlanets(planetsTable);
+    }
+  }, [planetName, planetsTable]);
 
   // Mapeia as chaves que retornam da API e modifica os nomes para ficar visualmente melhor;
   const planetFieldNames: { [key: string]: string } = {
@@ -31,18 +45,18 @@ function Table() {
   if (isLoad) return <h1>Carregando...</h1>;
 
   return (
-    <div className="container-fluid p-0">
-      {!isLoad && planetsTable.length > 0 && (
+    <>
+      {!isLoad && filteredPlanets.length > 0 && (
         <table className="table table-bordered equal-column-width">
           <thead>
             <tr>
-              {Object.keys(planetsTable[0]).map((planetKeys, i) => (
+              {Object.keys(filteredPlanets[0]).map((planetKeys, i) => (
                 <th key={i}>{planetFieldNames[planetKeys] || planetKeys}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {planetsTable.map((planet) => (
+            {filteredPlanets.map((planet) => (
               <tr key={planet.name}>
                 <td>{planet.name}</td>
                 <td>{planet.rotation_period}</td>
@@ -53,9 +67,7 @@ function Table() {
                 <td>{planet.terrain}</td>
                 <td>{planet.surface_water}</td>
                 <td>{planet.population}</td>
-                <td>
-                  {planet.films}
-                </td>
+                <td>{planet.films}</td>
                 <td>{planet.created}</td>
                 <td>{planet.edited}</td>
                 <td>{planet.url}</td>
@@ -64,7 +76,7 @@ function Table() {
           </tbody>
         </table>
       )}
-    </div>
+    </>
   );
 }
 
