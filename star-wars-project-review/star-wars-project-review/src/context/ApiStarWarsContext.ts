@@ -1,7 +1,8 @@
 import { createContext } from "react";
+import { PlanetType } from "../types";
 
 type ApiStarWarsContextType = {
-  planets: object[];
+  planets: PlanetType[];
   isLoad: boolean;
 };
 

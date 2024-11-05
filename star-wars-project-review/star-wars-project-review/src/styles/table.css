@@ -1,0 +1,12 @@
+.equal-column-width {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.equal-column-width th, .equal-column-width td {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 8%;
+    text-align: center;
+}
